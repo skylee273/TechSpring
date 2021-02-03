@@ -29,11 +29,19 @@ public class MemberService implements UserDetailsService {
 
     @Transactional
     public Long join(MemberDto memberDto) {
+        // 같은 이메일회원 중복 x
+        vailDateDuplicateMember(memberDto);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String password = passwordEncoder.encode(memberDto.getPassWord());
         memberDto.setPassWord(password);
         memberDto.setPassWordConfirm(password);
         return memberRepository.save(memberDto.toEntity()).getId();
+    }
+
+    private void vailDateDuplicateMember(MemberDto memberDto) {
+        memberRepository.findByEmail(memberDto.getEmail()).ifPresent(m -> {
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        });
     }
 
 

@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="utf-8" />
@@ -12,6 +12,31 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="bg-primary">
+    <script>
+        $('.myButton').click(function () {
+
+            $.ajax({
+                type: "GET",
+                url: "idCheck",
+                data: {
+                    "id": $('#userId').val()
+                },
+                success: function (data) {
+                    if ($.trim(data) == "YES") {
+                        if ($('#userId').val() != '') {
+                            $('#checkMsg').html('<p style="color:blue">사용가능한 ID 입니다!</p>');
+                        }
+                    } else {
+                        if ($('#userId').val() != '') {
+                            $('#checkMsg').html('<p style="color:red">이미 사용중인 ID 입니다. 다른 ID를 입력하세요.</p>');
+                            $('#userId').val('');
+                            $('#userId').focus();
+                        }
+                    }
+                }
+            })
+        });
+    </script>
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
@@ -61,6 +86,7 @@
                                     </div>
                                     <div class="card-footer text-center">
                                         <div class="small"><a href="login.html">Have an account? Go to login</a></div>
+                                        <div class="small" id="checkMsg"></div>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +101,7 @@
                             <div class="text-muted">Copyright &copy; Spring Project 2021</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
-                                &middot;
+
                                 <a href="#">Terms &amp; Conditions</a>
                             </div>
                         </div>
